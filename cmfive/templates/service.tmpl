@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * The service class for the {{ .Name }} module.
+ */
+class {{ .Name | Title }}Service extends DbService
+{
+    /**
+     * Adds this modules naviation to the navbar.
+     *
+     * @param Web $w
+     * @param string|null $title
+     * @param array|null $nav
+     * @return array
+     */
+    public function navigation(Web $w, ?string $title, ?array $nav = null): array
+    {
+        if (!empty($title)) {
+            $w->ctx("title", $title);
+        }
+
+        $nav = $nav ? $nav : [];
+
+        if (AuthService::getInstance($w)->loggedIn()) {
+            // Add menu links here...
+        }
+
+        $w->ctx("navigation", $nav);
+        return $nav;
+    }
+}
