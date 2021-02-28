@@ -1,6 +1,7 @@
 package cmfive
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"os/exec"
@@ -22,6 +23,8 @@ var (
 		"tests/acceptance",
 		"tests/unit",
 	}
+	//go:embed templates
+	templates embed.FS
 )
 
 // NewModule creates a new module in the modules directory. If the modules
@@ -59,13 +62,13 @@ func NewModule(name string) error {
 
 	// Create the files required for a module.
 	moduleFiles := map[string]string{
-		fmt.Sprintf("%stemplates/action.tmpl", TemplatesDir):   fmt.Sprintf("modules/%s/actions/index.php", name),
-		fmt.Sprintf("%stemplates/service.tmpl", TemplatesDir):  fmt.Sprintf("modules/%s/models/%sService.php", name, strings.Title(name)),
-		fmt.Sprintf("%stemplates/template.tmpl", TemplatesDir): fmt.Sprintf("modules/%s/templates/index.tpl.php", name),
-		fmt.Sprintf("%stemplates/config.tmpl", TemplatesDir):   fmt.Sprintf("modules/%s/%s.config.php", name, name),
-		fmt.Sprintf("%stemplates/hooks.tmpl", TemplatesDir):    fmt.Sprintf("modules/%s/%s.hooks.php", name, name),
-		fmt.Sprintf("%stemplates/roles.tmpl", TemplatesDir):    fmt.Sprintf("modules/%s/%s.roles.php", name, name),
-		fmt.Sprintf("%stemplates/README.tmpl", TemplatesDir):   fmt.Sprintf("modules/%s/README.md", name),
+		"templates/action.tmpl":   fmt.Sprintf("modules/%s/actions/index.php", name),
+		"templates/service.tmpl":  fmt.Sprintf("modules/%s/models/%sService.php", name, strings.Title(name)),
+		"templates/template.tmpl": fmt.Sprintf("modules/%s/templates/index.tpl.php", name),
+		"templates/config.tmpl":   fmt.Sprintf("modules/%s/%s.config.php", name, name),
+		"templates/hooks.tmpl":    fmt.Sprintf("modules/%s/%s.hooks.php", name, name),
+		"templates/roles.tmpl":    fmt.Sprintf("modules/%s/%s.roles.php", name, name),
+		"templates/README.tmpl":   fmt.Sprintf("modules/%s/README.md", name),
 	}
 	for k, v := range moduleFiles {
 		if err := newFileFromTemplate(k, v); err != nil {
@@ -106,7 +109,7 @@ func newFileFromTemplate(templatePath string, filePath string) error {
 	})
 
 	// Read the template file data.
-	data, err := os.ReadFile(templatePath)
+	data, err := templates.ReadFile(templatePath)
 	if err != nil {
 		return xerror.New("failed to read file data", err)
 	}

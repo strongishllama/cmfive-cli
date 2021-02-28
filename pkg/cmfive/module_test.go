@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/strongishllama/cmfive-cli/cmfive"
+	"github.com/strongishllama/cmfive-cli/pkg/cmfive"
 )
 
 func TestNewModule(t *testing.T) {
