@@ -15,7 +15,7 @@ jobs:
           go-version: ^1.16
       - run: |
         go build -o cmfive
-        tar -czvf "cmfive_${{ github.event.release.tag_name }}_linux_amd64.tar.gz" cmfive LICENSE
+        tar -czvf cmfive_linux_amd64.tar.gz cmfive LICENSE
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
