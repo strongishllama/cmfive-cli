@@ -1,0 +1,52 @@
+<?php
+
+class {{ .Name }} extends CmfiveMigration
+{
+    /**
+     * This method is run when rolling out migrations.
+     *
+     * @return void
+     */
+    public function up(): void
+    {
+    }
+
+    /**
+     * This method is run when rolling back migrations.
+     *
+     * @return void
+     */
+    public function down(): void
+    {
+    }
+
+    /**
+     * The return value of this method is displayed before a migration is run.
+     *
+     * @return string|null
+     */
+    public function preText(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The return value of this method is displayed after a migration is run.
+     *
+     * @return string|null
+     */
+    public function postText(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The description of the migration.
+     *
+     * @return string|null
+     */
+    public function description(): ?string
+    {
+        return null;
+    }
+}

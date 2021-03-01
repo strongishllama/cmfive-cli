@@ -1,12 +1,10 @@
 package cmfive
 
 import (
-	"embed"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"text/template"
 
 	"github.com/gofor-little/xerror"
 )
@@ -23,9 +21,12 @@ var (
 		"tests/acceptance",
 		"tests/unit",
 	}
-	//go:embed templates
-	templates embed.FS
 )
+
+// moduleData holds the data required to build module templates.
+type moduleData struct {
+	Name string
+}
 
 // NewModule creates a new module in the modules directory. If the modules
 // directory doesn't exist, one will be created.
@@ -70,8 +71,9 @@ func NewModule(name string) error {
 		"templates/roles.tmpl":    fmt.Sprintf("modules/%s/%s.roles.php", name, name),
 		"templates/README.tmpl":   fmt.Sprintf("modules/%s/README.md", name),
 	}
+
 	for k, v := range moduleFiles {
-		if err := newFileFromTemplate(k, v); err != nil {
+		if err := newFileFromTemplate(k, v, &moduleData{Name: name}); err != nil {
 			_ = os.RemoveAll(moduleDir)
 			return xerror.New("failed to create file from template", err)
 		}
@@ -82,43 +84,6 @@ func NewModule(name string) error {
 	cmd.Dir = moduleDir
 	if _, err := cmd.Output(); err != nil {
 		return xerror.New("failed to initialise git for module", err)
-	}
-
-	return nil
-}
-
-// newFileFromTemplate creates a file at filePath using the template at templatePath.
-func newFileFromTemplate(templatePath string, filePath string) error {
-	// Initialize the template with some helper functions mapped.
-	tmpl := template.New("template").Funcs(template.FuncMap{
-		"Title":   strings.Title,
-		"ToUpper": strings.ToUpper,
-	})
-
-	// Read the template file data.
-	data, err := templates.ReadFile(templatePath)
-	if err != nil {
-		return xerror.New("failed to read file data", err)
-	}
-
-	// Parse the template file data into the template.
-	tmpl, err = tmpl.Parse(string(data))
-	if err != nil {
-		return xerror.New("failed to parse templates", err)
-	}
-
-	// Create the file that the template execution will be written to.
-	file, err := os.Create(filePath)
-	if err != nil {
-		return xerror.New("failed to open file", err)
-	}
-
-	// Execute the template.
-	type module struct {
-		Name string
-	}
-	if err := tmpl.Execute(file, &module{Name: "test"}); err != nil {
-		return xerror.New("failed to execute template", err)
 	}
 
 	return nil

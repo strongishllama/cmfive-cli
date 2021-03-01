@@ -11,12 +11,12 @@ import (
 var newModuleCmd = &cobra.Command{
 	Use:   "module",
 	Short: "Create a new module",
-	Args:  checkArgs(1, "cannot create action: action name required"),
+	Args:  checkArgs(1, "cannot create module: module name required"),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cmd.SilenceUsage = true
 
 		if err := cmfive.NewModule(args[0]); err != nil {
-			return xerror.New("failed to create action", err)
+			return xerror.New("failed to create module", err)
 		}
 
 		return nil
@@ -26,4 +26,3 @@ var newModuleCmd = &cobra.Command{
 func init() {
 	newCmd.AddCommand(newModuleCmd)
 }
-
