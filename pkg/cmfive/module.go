@@ -87,19 +87,6 @@ func NewModule(name string) error {
 	return nil
 }
 
-// exosts checks if the file or directory exists at the given path.
-func exists(path string) (bool, error) {
-	if _, err := os.Stat(path); err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-
-		return false, err
-	}
-
-	return true, nil
-}
-
 // newFileFromTemplate creates a file at filePath using the template at templatePath.
 func newFileFromTemplate(templatePath string, filePath string) error {
 	// Initialize the template with some helper functions mapped.

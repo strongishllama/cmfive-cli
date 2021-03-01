@@ -15,7 +15,9 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "cmfive",
 	Short: "A CLI tool to help create Cmfive applications.",
-	Long:  `A CLI tool to help create Cmfive applications.`,
+	Annotations: map[string]string{
+		"help:feedback": "Open an issue https://github.com/strongishllama/cmfive-cli/issues",
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -33,11 +35,11 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmfive-cli.yaml)")
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmfive-cli.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
