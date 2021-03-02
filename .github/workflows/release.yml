@@ -5,23 +5,86 @@ on:
     types: [ published ]
 
 jobs:
-  build:
-    name: Build assets
+  build-linux:
+    name: Build Linux Assets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
           go-version: ^1.16
-      - name: Build Linux AMD64
+      - name: Build Linux
         run: |
           go build -o cmfive
-          tar -czvf cmfive_${{ github.event.release.tag_name }}_linux_amd64.tar.gz cmfive LICENSE
+          architecture=$(uname -m)
+          tar -czvf cmfive_${{ github.event.release.tag_name }}_linux_$(uname -m).tar.gz cmfive LICENSE
+          sha256sum cmfive_${{ github.event.release.tag_name }}_linux_$(uname -m).tar.gz > checksums.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: checksums.txt
+          path: ./checksums.txt
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./cmfive_${{ github.event.release.tag_name }}_linux_amd64.tar.gz
-          asset_name: cmfive_${{ github.event.release.tag_name }}_linux_amd64.tar.gz
+          asset_path: ./cmfive_${{ github.event.release.tag_name }}_linux_$(uname -m).tar.gz
+          asset_name: cmfive_${{ github.event.release.tag_name }}_linux_$(uname -m).tar.gz
           asset_content_type: application/zip
+
+  build-macos:
+    name: Build MacOS Assets
+    needs: build-linux
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ^1.16
+      - uses: actions/download-artifact@v2
+        with:
+          name: checksums.txt
+      - name: Build MacOS
+        run: |
+          go build -o cmfive
+          architecture=$(uname -m)
+          tar -czvf cmfive_${{ github.event.release.tag_name }}_macos_$(uname -m).tar.gz cmfive LICENSE
+          sha256sum cmfive_${{ github.event.release.tag_name }}_macos_$(uname -m).tar.gz >> checksums.txt
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: checksums.txt
+      #     path: ./checksums.txt
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./cmfive_${{ github.event.release.tag_name }}_macos_$(uname -m).tar.gz
+          asset_name: cmfive_${{ github.event.release.tag_name }}_macos_$(uname -m).tar.gz
+          asset_content_type: application/zip
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./checksums.txt
+          asset_name: checksums.txt
+          asset_content_type: application/zip
+
+    # build-windows:
+    #   name: Build Windows Assets
+    #   needs: build-macos
+    #   runs-on: windows-latest
+    #   steps:
+    #     - uses: actions/checkout@v2
+    #     - uses: actions/setup-go@v2
+    #       with:
+    #         go-version: ^1.16
+    #     - uses: actions/download-artifact@v2
+    #       with:
+    #         name: checksums.txt
+    #     - name: Build MacOS
+    #       run: |
+    #         go build -o cmfive.exe
+    #         $compress = @{ Path = "cmfive.exe", "LICENSE" DestinationPath = "result.Zip" }
+    #         Compress-Archive @compress

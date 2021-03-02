@@ -8,9 +8,10 @@ import (
 	"github.com/strongishllama/cmfive-cli/pkg/cmfive"
 )
 
-func TestNewModule(t *testing.T) {
+func TestNewMigration(t *testing.T) {
 	setup(t)
 	defer teardown(t)
 
 	require.NoError(t, cmfive.NewModule("payroll"))
+	require.NoError(t, cmfive.NewMigration("payroll", "InitialMigration"))
 }
