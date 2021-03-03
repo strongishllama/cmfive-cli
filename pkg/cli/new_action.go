@@ -7,16 +7,16 @@ import (
 	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
-// newMigrationCmd initializes and returns the command for CLI calls to "cmfive new migration".
-func newMigrationCmd() *cobra.Command {
+// newActionCmd initializes and returns the command for CLI calls to "cmfive new action".
+func newActionCmd() *cobra.Command {
 	command := &cobra.Command{
-		Use:     "migration <module-name> <migration-name> [flags]",
-		Short:   "Create a new migration for a module",
-		Example: "cmfive new migration payroll InitialMigration",
-		Args:    CheckArgs(2, "cannot create migration: module name and migration name required"),
+		Use:     "action <module-name> <action-name> <action-method> [flags]",
+		Short:   "Create a new action for a module",
+		Example: "cmfive new action payroll edit GET",
+		Args:    CheckArgs(3, "cannot create action: module name, action name and action method required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := gen.NewMigration(args[0], args[1]); err != nil {
-				return xerror.New("failed to create migration", err)
+			if err := gen.NewAction(args[0], args[1], args[2]); err != nil {
+				return xerror.New("failed to create action", err)
 			}
 
 			return nil

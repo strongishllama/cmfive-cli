@@ -12,10 +12,10 @@ While it is very early days the plan is to create a cross platform CLI tool to h
 
 ### Roadmap
 * (DONE) Module generation.
-* Action generation.
+* (DONE) Action generation.
 * (DONE) Migration generation.
-* Basic model generation.
-* Basic test generation.
+* (DONE) Model generation.
+* Tests generation.
 
 ### Installation
 Coming soon :)

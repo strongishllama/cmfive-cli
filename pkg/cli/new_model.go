@@ -3,20 +3,19 @@ package cli
 import (
 	"github.com/gofor-little/xerror"
 	"github.com/spf13/cobra"
-
 	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
-// newMigrationCmd initializes and returns the command for CLI calls to "cmfive new migration".
-func newMigrationCmd() *cobra.Command {
+// newModelCmd initializes and returns the command for CLI calls to "cmfive new model".
+func newModelCmd() *cobra.Command {
 	command := &cobra.Command{
-		Use:     "migration <module-name> <migration-name> [flags]",
-		Short:   "Create a new migration for a module",
-		Example: "cmfive new migration payroll InitialMigration",
-		Args:    CheckArgs(2, "cannot create migration: module name and migration name required"),
+		Use:     "model <module-name> <model-name> [flags]",
+		Short:   "Create a new model for a module",
+		Example: "cmfive new model payroll Employee",
+		Args:    CheckArgs(2, "cannot create action: module name and model name required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := gen.NewMigration(args[0], args[1]); err != nil {
-				return xerror.New("failed to create migration", err)
+			if err := gen.NewModel(args[0], args[1]); err != nil {
+				return xerror.New("failed to create model", err)
 			}
 
 			return nil

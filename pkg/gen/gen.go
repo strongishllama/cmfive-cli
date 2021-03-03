@@ -35,8 +35,7 @@ func exists(path string) (bool, error) {
 func newFileFromTemplate(templatePath string, filePath string, v interface{}) error {
 	// Initialize the template with some helper functions mapped.
 	tmpl := template.New("template").Funcs(template.FuncMap{
-		"Title":   strings.Title,
-		"ToUpper": strings.ToUpper,
+		"Title": strings.Title,
 	})
 
 	// Read the template file data.

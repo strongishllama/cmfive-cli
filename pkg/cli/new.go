@@ -43,7 +43,9 @@ func newCmd() *cobra.Command {
 	})
 
 	command.AddCommand(newModuleCmd())
+	command.AddCommand(newActionCmd())
 	command.AddCommand(newMigrationCmd())
+	command.AddCommand(newModelCmd())
 
 	return command
 }

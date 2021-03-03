@@ -1,12 +1,11 @@
 <?php
 
 /**
- * This action responds GET requests under /{{ .Name }}.
+ * This action responds GET requests under /{{.ModuleName}}/{{.Name}}.
  *
  * @param Web $w
  * @return void
  */
-function index_GET(Web $w): void
+function {{.Name}}_{{.Method}}(Web $w): void
 {
-    {{ .Name | Title }}Service::getInstance($w)->navigation($w, "{{ .Name | ToUpper }}");
 }

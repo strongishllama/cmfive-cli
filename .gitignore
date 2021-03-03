@@ -25,4 +25,5 @@ node_modules/
 *.env
 
 # Test modules directory created by tests.
+modules/
 */modules/
