@@ -4,7 +4,7 @@ import (
 	"github.com/gofor-little/xerror"
 	"github.com/spf13/cobra"
 
-	"github.com/strongishllama/cmfive-cli/pkg/cmfive"
+	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
 // newMigrationCmd initializes and returns the command for CLI calls to "cmfive new migration".
@@ -17,7 +17,7 @@ func newMigrationCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cmd.SilenceUsage = true
 
-			if err := cmfive.NewMigration(args[0], args[1]); err != nil {
+			if err := gen.NewMigration(args[0], args[1]); err != nil {
 				return xerror.New("failed to create migration", err)
 			}
 

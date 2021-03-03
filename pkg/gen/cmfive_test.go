@@ -1,4 +1,4 @@
-package cmfive_test
+package gen_test
 
 import (
 	"os"

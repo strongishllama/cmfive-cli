@@ -4,7 +4,7 @@ import (
 	"github.com/gofor-little/xerror"
 	"github.com/spf13/cobra"
 
-	"github.com/strongishllama/cmfive-cli/pkg/cmfive"
+	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
 // newModuleCmd initializes and returns the command for CLI calls to "cmfive new module".
@@ -15,7 +15,7 @@ func newModuleCmd() *cobra.Command {
 		Example: "cmfive new module payroll",
 		Args:    CheckArgs(1, "cannot create module: module name required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := cmfive.NewModule(args[0]); err != nil {
+			if err := gen.NewModule(args[0]); err != nil {
 				return xerror.New("failed to create module", err)
 			}
 

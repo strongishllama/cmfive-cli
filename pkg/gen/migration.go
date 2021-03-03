@@ -1,4 +1,4 @@
-package cmfive
+package gen
 
 import (
 	"fmt"
