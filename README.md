@@ -11,9 +11,9 @@
 While it is very early days the plan is to create a cross platform CLI tool to help with creating Cmfive applications.
 
 ### Roadmap
-* (WIP) Basic module generation.
+* (DONE) Module generation.
 * Action generation.
-* Migration generation.
+* (DONE) Migration generation.
 * Basic model generation.
 * Basic test generation.
 
