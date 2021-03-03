@@ -1,23 +1,17 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
-
-	homedir "github.com/mitchellh/go-homedir"
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "cmfive",
-	Short: "A CLI tool to help create Cmfive applications.",
-	Annotations: map[string]string{
-		"help:feedback": "Open an issue https://github.com/strongishllama/cmfive-cli/issues",
-	},
+	Use:     "cmfive <command> <subcommand> [flags]",
+	Short:   "A CLI tool to help create Cmfive applications.",
+	Example: "cmfive new module payroll",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -29,7 +23,37 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(initConfig)
+
+	rootCmd.SetHelpFunc(func(cmd *cobra.Command, args []string) {
+		if rootCmd.Long != "" {
+			cmd.Printf("%s\n\n", rootCmd.Long)
+		} else {
+			cmd.Printf("%s\n\n", rootCmd.Short)
+		}
+
+		cmd.Println("USAGE:")
+		cmd.Printf("  %s\n\n", rootCmd.Use)
+
+		commands := rootCmd.Commands()
+		if len(commands) != 0 {
+			cmd.Println("COMMANDS:")
+
+			for _, c := range commands {
+				cmd.Printf("  %s\t\t%s\n", c.Name(), c.Short)
+			}
+		}
+		cmd.Println()
+
+		flagUsages := rootCmd.LocalFlags().FlagUsages()
+		if flagUsages != "" {
+			cmd.Println("FLAGS:")
+			cmd.Println(flagUsages)
+		}
+
+		cmd.Println("EXAMPLE:")
+		cmd.Printf("  %s\n", rootCmd.Example)
+	})
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
@@ -43,27 +67,27 @@ func init() {
 }
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+// func initConfig() {
+// 	if cfgFile != "" {
+// 		// Use config file from the flag.
+// 		viper.SetConfigFile(cfgFile)
+// 	} else {
+// 		// Find home directory.
+// 		home, err := homedir.Dir()
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			os.Exit(1)
+// 		}
 
-		// Search config in home directory with name ".cmfive-cli" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".cmfive-cli")
-	}
+// 		// Search config in home directory with name ".cmfive-cli" (without extension).
+// 		viper.AddConfigPath(home)
+// 		viper.SetConfigName(".cmfive-cli")
+// 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+// 	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
-}
+// 	// If a config file is found, read it in.
+// 	if err := viper.ReadInConfig(); err == nil {
+// 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+// 	}
+// }
