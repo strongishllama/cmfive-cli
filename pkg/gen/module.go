@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"github.com/gofor-little/xerror"
+
+	"github.com/strongishllama/cmfive-cli/pkg/tmpl"
 )
 
 var (
@@ -24,7 +26,7 @@ var (
 	}
 )
 
-// moduleData holds the data required to build module templates.
+// moduleData holds the data required to build the module template.
 type moduleData struct {
 	Name string
 }
@@ -73,13 +75,13 @@ func NewModule(name string) error {
 	}
 
 	for k, v := range moduleFiles {
-		if err := newFileFromTemplate(k, v, &moduleData{Name: name}); err != nil {
+		if err := tmpl.NewFileFromTemplate(templates, k, v, &moduleData{Name: name}); err != nil {
 			_ = os.RemoveAll(moduleDir)
 			return xerror.New("failed to create file from template", err)
 		}
 	}
 	// The action template cannot be created from the map because it required additional data.
-	if err := newFileFromTemplate("templates/action.tmpl", fmt.Sprintf("modules/%s/actions/index.php", name), &actionData{Name: "index", Method: http.MethodGet, ModuleName: name}); err != nil {
+	if err := tmpl.NewFileFromTemplate(templates, "templates/action.tmpl", fmt.Sprintf("modules/%s/actions/index.php", name), &actionData{Name: "index", Method: http.MethodGet, ModuleName: name}); err != nil {
 		_ = os.RemoveAll(moduleDir)
 		return xerror.New("failed to create file from template", err)
 	}

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
 	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 

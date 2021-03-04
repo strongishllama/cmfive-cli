@@ -6,9 +6,11 @@ import (
 	"strings"
 
 	"github.com/gofor-little/xerror"
+
+	"github.com/strongishllama/cmfive-cli/pkg/tmpl"
 )
 
-// modelData holds the data required to build model templates.
+// modelData holds the data required to build the model template.
 type modelData struct {
 	Name string
 }
@@ -49,7 +51,7 @@ func NewModel(moduleName string, modelName string) error {
 		return xerror.New("a model with that name already exists", err)
 	}
 
-	if err := newFileFromTemplate("templates/model.tmpl", modelPath, &modelData{Name: modelName}); err != nil {
+	if err := tmpl.NewFileFromTemplate(templates, "templates/model.tmpl", modelPath, &modelData{Name: modelName}); err != nil {
 		return xerror.New("failed to create file from template", err)
 	}
 

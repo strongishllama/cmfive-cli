@@ -6,9 +6,11 @@ import (
 	"strings"
 
 	"github.com/gofor-little/xerror"
+
+	"github.com/strongishllama/cmfive-cli/pkg/tmpl"
 )
 
-// actionData holds the data required to build action templates.
+// actionData holds the data required to build the action template.
 type actionData struct {
 	Name       string
 	Method     string
@@ -53,7 +55,7 @@ func NewAction(moduleName string, actionName string, actionMethod string) error 
 	}
 
 	data := &actionData{Name: actionName, Method: actionMethod, ModuleName: moduleName}
-	if err := newFileFromTemplate("templates/action.tmpl", actionPath, data); err != nil {
+	if err := tmpl.NewFileFromTemplate(templates, "templates/action.tmpl", actionPath, data); err != nil {
 		return xerror.New("failed to create file from template", err)
 	}
 

@@ -7,9 +7,11 @@ import (
 	"time"
 
 	"github.com/gofor-little/xerror"
+
+	"github.com/strongishllama/cmfive-cli/pkg/tmpl"
 )
 
-// migrationData holds the data required to build migration templates.
+// migrationData holds the data required to build the migration template.
 type migrationData struct {
 	Name string
 }
@@ -41,7 +43,7 @@ func NewMigration(moduleName string, migrationName string) error {
 
 	migrationPath := fmt.Sprintf("%s/%s-%s%s.php", migrationsDir, time.Now().Format("20060102150405"), strings.Title(moduleName), migrationName)
 	data := &migrationData{Name: fmt.Sprintf("%s%s", strings.Title(moduleName), migrationName)}
-	if err := newFileFromTemplate("templates/migration.tmpl", migrationPath, data); err != nil {
+	if err := tmpl.NewFileFromTemplate(templates, "templates/migration.tmpl", migrationPath, data); err != nil {
 		return xerror.New("failed to create file from template", err)
 	}
 

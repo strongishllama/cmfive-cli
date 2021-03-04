@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/gofor-little/xerror"
 	"github.com/spf13/cobra"
+
 	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
