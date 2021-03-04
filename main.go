@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/strongishllama/cmfive-cli/pkg/cmd"
-	"github.com/strongishllama/cmfive-cli/pkg/cmfive"
+	"github.com/strongishllama/cmfive-cli/pkg/cli"
+	"github.com/strongishllama/cmfive-cli/pkg/gen"
 )
 
 func main() {
-	cmfive.TemplatesDir = "cmfive/"
-	cmd.Execute()
+	gen.TemplatesDir = "gen/"
+	cli.Execute()
 }

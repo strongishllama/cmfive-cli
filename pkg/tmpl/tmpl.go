@@ -1,4 +1,4 @@
-package cmfive
+package tmpl
 
 import (
 	"embed"
@@ -9,38 +9,16 @@ import (
 	"github.com/gofor-little/xerror"
 )
 
-var (
-	// TemplatesDir is the directory that the templates are located.
-	// By default this is an empty string but can be overridden.
-	TemplatesDir string = ""
-	//go:embed templates
-	templates embed.FS
-)
-
-// exosts checks if the file or directory exists at the given path.
-func exists(path string) (bool, error) {
-	if _, err := os.Stat(path); err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-
-		return false, err
-	}
-
-	return true, nil
-}
-
-// newFileFromTemplate creates a file at filePath using the template at templatePath while
+// NewFileFromTemplate creates a file at filePath using the template at templatePath while
 // parsing v into the template.
-func newFileFromTemplate(templatePath string, filePath string, v interface{}) error {
+func NewFileFromTemplate(fileSystem embed.FS, templatePath string, filePath string, v interface{}) error {
 	// Initialize the template with some helper functions mapped.
 	tmpl := template.New("template").Funcs(template.FuncMap{
-		"Title":   strings.Title,
-		"ToUpper": strings.ToUpper,
+		"Title": strings.Title,
 	})
 
 	// Read the template file data.
-	data, err := templates.ReadFile(templatePath)
+	data, err := fileSystem.ReadFile(templatePath)
 	if err != nil {
 		return xerror.New("failed to read file data", err)
 	}

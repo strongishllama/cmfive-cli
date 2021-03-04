@@ -1,12 +1,15 @@
-package cmfive
+package gen
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"strings"
 
 	"github.com/gofor-little/xerror"
+
+	"github.com/strongishllama/cmfive-cli/pkg/tmpl"
 )
 
 var (
@@ -23,7 +26,7 @@ var (
 	}
 )
 
-// moduleData holds the data required to build module templates.
+// moduleData holds the data required to build the module template.
 type moduleData struct {
 	Name string
 }
@@ -63,7 +66,6 @@ func NewModule(name string) error {
 
 	// Create the files required for a module.
 	moduleFiles := map[string]string{
-		"templates/action.tmpl":   fmt.Sprintf("modules/%s/actions/index.php", name),
 		"templates/service.tmpl":  fmt.Sprintf("modules/%s/models/%sService.php", name, strings.Title(name)),
 		"templates/template.tmpl": fmt.Sprintf("modules/%s/templates/index.tpl.php", name),
 		"templates/config.tmpl":   fmt.Sprintf("modules/%s/%s.config.php", name, name),
@@ -73,10 +75,15 @@ func NewModule(name string) error {
 	}
 
 	for k, v := range moduleFiles {
-		if err := newFileFromTemplate(k, v, &moduleData{Name: name}); err != nil {
+		if err := tmpl.NewFileFromTemplate(templates, k, v, &moduleData{Name: name}); err != nil {
 			_ = os.RemoveAll(moduleDir)
 			return xerror.New("failed to create file from template", err)
 		}
+	}
+	// The action template cannot be created from the map because it required additional data.
+	if err := tmpl.NewFileFromTemplate(templates, "templates/action.tmpl", fmt.Sprintf("modules/%s/actions/index.php", name), &actionData{Name: "index", Method: http.MethodGet, ModuleName: name}); err != nil {
+		_ = os.RemoveAll(moduleDir)
+		return xerror.New("failed to create file from template", err)
 	}
 
 	// Initialize git for the module.

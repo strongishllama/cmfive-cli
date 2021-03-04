@@ -1,4 +1,4 @@
-## Cmfive CLI
+# Cmfive CLI
 
 ![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/strongishllama/cmfive-cli?include_prereleases)
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/strongishllama/cmfive-cli)
@@ -7,18 +7,24 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/strongishllama/cmfive-cli)](https://goreportcard.com/report/github.com/strongishllama/cmfive-cli)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/strongishllama/cmfive-cli)](https://pkg.go.dev/github.com/strongishllama/cmfive-cli)
 
-### Introduction
-While it is very early days the plan is to create a cross platform CLI tool to help with creating Cmfive applications.
+# Introduction
+A cross platform CLI tool to help with creating Cmfive applications.
 
-### Roadmap
-* (WIP) Basic module generation.
-* Action generation.
-* Migration generation.
-* Basic model generation.
-* Basic test generation.
+# Installation
 
-### Installation
-Coming soon :)
+## Linux
+Pre built binaries can be found on the releases [page](https://github.com/strongishllama/cmfive-cli/releases)
 
-### Testing
+## Windows
+Coming soon.
+
+## Mac
+Coming soon.
+
+## Source
+1. Download and install [Go](https://golang.org/dl) if you haven't already. Go 1.16 is the minimum required version.
+2. From the root directory run ```go build -o cmfive```.
+3. Add the built binary to your path.
+
+# Testing
 Run ```go test ./...``` in the root directory of the project.
