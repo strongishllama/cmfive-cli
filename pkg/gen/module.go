@@ -40,27 +40,27 @@ func NewModule(name string) error {
 	// Create modules directory if it doesn't exist.
 	dirExists, err := exists("modules")
 	if err != nil {
-		return xerror.New("failed to check if directory exists", err)
+		return xerror.Wrap("failed to check if directory exists", err)
 	}
 	if !dirExists {
 		if err := os.Mkdir("modules", os.ModePerm); err != nil {
-			return xerror.New("failed to create directory", err)
+			return xerror.Wrap("failed to create directory", err)
 		}
 	}
 
 	// Check that that module name is free.
 	dirExists, err = exists(moduleDir)
 	if err != nil {
-		return xerror.New("failed to check if directory exists", err)
+		return xerror.Wrap("failed to check if directory exists", err)
 	}
 	if dirExists {
-		return xerror.New("a module with that name already exists, module names must be uneque", nil)
+		return xerror.New("a module with that name already exists, module names must be uneque")
 	}
 
 	// Create the directories required for a module.
 	for _, d := range moduleDirs {
 		if err := os.MkdirAll(fmt.Sprintf("%s/%s", moduleDir, d), os.ModePerm); err != nil {
-			return xerror.New("failed to create directory", err)
+			return xerror.Wrap("failed to create directory", err)
 		}
 	}
 
@@ -77,20 +77,20 @@ func NewModule(name string) error {
 	for k, v := range moduleFiles {
 		if err := tmpl.NewFileFromTemplate(templates, k, v, &moduleData{Name: name}); err != nil {
 			_ = os.RemoveAll(moduleDir)
-			return xerror.New("failed to create file from template", err)
+			return xerror.Wrap("failed to create file from template", err)
 		}
 	}
 	// The action template cannot be created from the map because it required additional data.
 	if err := tmpl.NewFileFromTemplate(templates, "templates/action.tmpl", fmt.Sprintf("modules/%s/actions/index.php", name), &actionData{Name: "index", Method: http.MethodGet, ModuleName: name}); err != nil {
 		_ = os.RemoveAll(moduleDir)
-		return xerror.New("failed to create file from template", err)
+		return xerror.Wrap("failed to create file from template", err)
 	}
 
 	// Initialize git for the module.
 	cmd := exec.Command("git", "init")
 	cmd.Dir = moduleDir
 	if _, err := cmd.Output(); err != nil {
-		return xerror.New("failed to initialise git for module", err)
+		return xerror.Wrap("failed to initialise git for module", err)
 	}
 
 	return nil

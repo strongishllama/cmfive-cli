@@ -23,18 +23,18 @@ func runComposerCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Figure out the installed PHP version.
 			if err := tmpl.NewFileFromTemplate(templates, "templates/version.tmpl", "version.php", nil); err != nil {
-				return xerror.New("failed to create file from template", err)
+				return xerror.Wrap("failed to create file from template", err)
 			}
 			defer os.Remove("version.php")
 
 			output, err := execCommand("php", "version.php")
 			if err != nil {
-				return xerror.New("failed to check PHP version", err)
+				return xerror.Wrap("failed to check PHP version", err)
 			}
 
 			parts := strings.Split(output, ".")
 			if len(parts) != 2 {
-				return xerror.New("unexptected length from parts", nil)
+				return xerror.New("unexptected length from parts")
 			}
 
 			// Build template to create composer.json file.
@@ -44,13 +44,13 @@ func runComposerCmd() *cobra.Command {
 			}
 
 			if err := tmpl.NewFileFromTemplate(templates, "templates/composer.tmpl", "composer.json", data); err != nil {
-				return xerror.New("failed to create file from template", err)
+				return xerror.Wrap("failed to create file from template", err)
 			}
 
 			// Install composer dependencies.
 			output, err = execCommand("php", "composer.phar", "install")
 			if err != nil {
-				return xerror.New("failed to install composer dependencies", err)
+				return xerror.Wrap("failed to install composer dependencies", err)
 			}
 			cmd.Println(output)
 

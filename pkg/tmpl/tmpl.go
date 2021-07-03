@@ -20,24 +20,24 @@ func NewFileFromTemplate(fileSystem embed.FS, templatePath string, filePath stri
 	// Read the template file data.
 	data, err := fileSystem.ReadFile(templatePath)
 	if err != nil {
-		return xerror.New("failed to read file data", err)
+		return xerror.Wrap("failed to read file data", err)
 	}
 
 	// Parse the template file data into the template.
 	tmpl, err = tmpl.Parse(string(data))
 	if err != nil {
-		return xerror.New("failed to parse templates", err)
+		return xerror.Wrap("failed to parse templates", err)
 	}
 
 	// Create the file that the template execution will be written to.
 	file, err := os.Create(filePath)
 	if err != nil {
-		return xerror.New("failed to open file", err)
+		return xerror.Wrap("failed to open file", err)
 	}
 
 	// Execute the template.
 	if err := tmpl.Execute(file, v); err != nil {
-		return xerror.New("failed to execute template", err)
+		return xerror.Wrap("failed to execute template", err)
 	}
 
 	return nil

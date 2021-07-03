@@ -41,7 +41,7 @@ func execCommand(name string, args ...string) (string, error) {
 	cmd.Stderr = mwStderr
 
 	if err := cmd.Run(); err != nil {
-		return stderr.String(), xerror.New("failed to run command", err)
+		return stderr.String(), xerror.Wrap("failed to run command", err)
 	}
 
 	return stdout.String(), nil

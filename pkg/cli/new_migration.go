@@ -16,7 +16,7 @@ func newMigrationCmd() *cobra.Command {
 		Args:    CheckArgs(2, "cannot create migration: module name and migration name required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := gen.NewMigration(args[0], args[1]); err != nil {
-				return xerror.New("failed to create migration", err)
+				return xerror.Wrap("failed to create migration", err)
 			}
 
 			return nil

@@ -16,7 +16,7 @@ func newModelCmd() *cobra.Command {
 		Args:    CheckArgs(2, "cannot create action: module name and model name required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := gen.NewModel(args[0], args[1]); err != nil {
-				return xerror.New("failed to create model", err)
+				return xerror.Wrap("failed to create model", err)
 			}
 
 			return nil

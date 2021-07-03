@@ -25,34 +25,34 @@ func NewModel(moduleName string, modelName string) error {
 	// Check that the module directory exists.
 	dirExists, err := exists(fmt.Sprintf("modules/%s", moduleName))
 	if err != nil {
-		return xerror.New("failed to check if directory exists", err)
+		return xerror.Wrap("failed to check if directory exists", err)
 	}
 	if !dirExists {
-		return xerror.New("module with that name doesn't exist", err)
+		return xerror.Wrap("module with that name doesn't exist", err)
 	}
 
 	// Create models directory if it doesn't exist.
 	dirExists, err = exists(modelsDir)
 	if err != nil {
-		return xerror.New("failed to check if directory exists", err)
+		return xerror.Wrap("failed to check if directory exists", err)
 	}
 	if !dirExists {
 		if err := os.Mkdir(modelsDir, os.ModePerm); err != nil {
-			return xerror.New("failed to create directory", err)
+			return xerror.Wrap("failed to create directory", err)
 		}
 	}
 
 	// Check that an model with that name doesn't already exist.
 	model, err := exists(modelPath)
 	if err != nil {
-		return xerror.New("failed to check if file exists", err)
+		return xerror.Wrap("failed to check if file exists", err)
 	}
 	if model {
-		return xerror.New("a model with that name already exists", err)
+		return xerror.Wrap("a model with that name already exists", err)
 	}
 
 	if err := tmpl.NewFileFromTemplate(templates, "templates/model.tmpl", modelPath, &modelData{Name: modelName}); err != nil {
-		return xerror.New("failed to create file from template", err)
+		return xerror.Wrap("failed to create file from template", err)
 	}
 
 	return nil

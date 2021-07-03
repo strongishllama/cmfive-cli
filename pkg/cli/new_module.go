@@ -16,7 +16,7 @@ func newModuleCmd() *cobra.Command {
 		Args:    CheckArgs(1, "cannot create module: module name required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := gen.NewModule(args[0]); err != nil {
-				return xerror.New("failed to create module", err)
+				return xerror.Wrap("failed to create module", err)
 			}
 
 			return nil

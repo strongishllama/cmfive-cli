@@ -16,7 +16,7 @@ func newActionCmd() *cobra.Command {
 		Args:    CheckArgs(3, "cannot create action: module name, action name and action method required"),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := gen.NewAction(args[0], args[1], args[2]); err != nil {
-				return xerror.New("failed to create action", err)
+				return xerror.Wrap("failed to create action", err)
 			}
 
 			return nil

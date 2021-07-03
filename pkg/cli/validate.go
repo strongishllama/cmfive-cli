@@ -9,11 +9,11 @@ import (
 func CheckArgs(length int, message string) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
 		if len(args) > length {
-			return xerror.New("too many arguments", nil)
+			return xerror.New("too many arguments")
 		}
 
 		if len(args) < length {
-			return xerror.New(message, nil)
+			return xerror.New(message)
 		}
 
 		return nil
